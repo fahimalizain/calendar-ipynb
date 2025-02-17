@@ -1,0 +1,412 @@
+{
+    "kwalee": {
+        "title": "Kwalee",
+        "color": "#008000",
+        "patterns": [
+            {
+                "regex": "^.* \\| (Almada|Kwalee)$"
+            },
+            {
+                "calendarId": "fahim.zain@kwalee.com"
+            }
+        ],
+        "children": {
+            "discussions": {
+                "title": "Discussions",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": "^.*/.* \\| Almada$"
+                    }
+                ]
+            }
+        }
+    },
+    "spiritual": {
+        "title": "Spiritual",
+        "color": "#008000",
+        "children": {
+            "quran": {
+                "title": "Quran",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": "^.*(Quran|Kahf).*$"
+                    }
+                ]
+            },
+            "namaz": {
+                "title": "Namaz",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": ".*(Prayer:|Masjid).*"
+                    },
+                    {
+                        "regex": "^.*(Jumu'ah|Jummah|Jumuah|Friday Prayer).*$"
+                    }
+                ]
+            },
+            "muraqaba": {
+                "title": "Muraqaba",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": ".*Muraqaba.*"
+                    }
+                ]
+            },
+            "salat_istighfar": {
+                "title": "Salat Istighfar",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": "^.*Salat & Istighfar.*$"
+                    }
+                ]
+            },
+            "muzakara": {
+                "title": "Muzakara",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": "^.*(Hosh Bardham|Muzakara|Halqa).*$"
+                    }
+                ]
+            }
+        }
+    },
+    "personal": {
+        "title": "Personal",
+        "color": "#008000",
+        "patterns": [
+            {
+                "regex": "^.* \\| Personal.*"
+            },
+            {
+                "regex": "^TENETS Reminder!$"
+            }
+        ],
+        "children": {
+            "planning": {
+                "title": "Planning",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": "^.*(Day Planning).*$"
+                    }
+                ]
+            },
+            "winding-down": {
+                "title": "Winding Down",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": "^.*(Woke Up|Asleep).*$"
+                    }
+                ]
+            },
+            "power-nap": {
+                "title": "Power Nap",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": "^.*(Power Nap|Quick Nap).*$"
+                    }
+                ]
+            },
+            "food": {
+                "title": "Food",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": ".*([bB]reakfast|[lL]unch|[dD]inner|Restaurant|Tea|Coffee).*"
+                    }
+                ]
+            },
+            "bathroom": {
+                "title": "Bathroom",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": ".*(Bathroom|Wash Up|Fresh Up|Get Ready for Office|Get Ready for Work).*"
+                    }
+                ]
+            },
+            "finances": {
+                "title": "Finances",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": ".*Finances.*"
+                    }
+                ]
+            }
+        }
+    },
+    "family": {
+        "title": "Family",
+        "color": "#008000",
+        "patterns": [
+            {
+                "regex": "^.* \\| Family.*"
+            }
+        ]
+    },
+    "code73": {
+        "title": "CODE73",
+        "color": "#008000",
+        "patterns": [
+            {
+                "regex": "^.* \\| CODE73$"
+            }
+        ],
+        "children": {
+            "vestido": {
+                "title": "Vestido",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": "^.* \\| Vestido$"
+                    }
+                ]
+            },
+            "icetreat": {
+                "title": "Icetreat",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": "^.* \\| (Icetreat|IceTreat)$"
+                    }
+                ]
+            },
+            "spicy-home": {
+                "title": "Spicy Home",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": "^.* \\| (Spicy Home|SpicyHome)$"
+                    }
+                ]
+            },
+            "kidooza": {
+                "title": "Kidooza",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": "^.*[kK]idooza.*$"
+                    }
+                ]
+            },
+            "simple-aid": {
+                "title": "Simple Aid",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": "^.* \\| (Simple Aid|SimpleAid)$"
+                    }
+                ]
+            },
+            "calendar-ipynb": {
+                "title": "calendar-ipynb",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": "^.* \\| calendar-ipynb$"
+                    }
+                ]
+            },
+            "mentorship": {
+                "title": "Mentorship",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": "^.* \\| Mentorship$"
+                    }
+                ]
+            }
+        }
+    },
+    "commute": {
+        "title": "Commute",
+        "color": "#008000",
+        "patterns": [
+            {
+                "regex": "^.* \\| Commute$"
+            }
+        ],
+        "children": {
+            "booking": {
+                "title": "Booking",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": "^.*(Train Ticket).*$"
+                    }
+                ]
+            }
+        }
+    },
+    "social": {
+        "title": "Social",
+        "color": "#008000",
+        "patterns": [
+            {
+                "regex": "^.* \\| (Social|Friends)$"
+            }
+        ]
+    },
+    "activities": {
+        "title": "Activities",
+        "children": {
+            "movies": {
+                "title": "Movies",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": "^.*(Movies|Movie|Cinema|Theater|Theatre).*$"
+                    }
+                ]
+            },
+            "gaming": {
+                "title": "Gaming",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": "^.* \\| (Gaming|Games|Game|Sports)$"
+                    }
+                ]
+            },
+            "badminton": {
+                "title": "Badminton",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": ".*Badminton.*"
+                    }
+                ]
+            },
+            "football": {
+                "title": "Football",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": ".*Football.*"
+                    }
+                ]
+            },
+            "table-tennis": {
+                "title": "Table Tennis",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": ".*Table Tennis.*"
+                    }
+                ]
+            }
+        }
+    },
+    "stay_informed": {
+        "title": "Stay Informed",
+        "color": "#008000",
+        "patterns": [
+            {
+                "regex": "^.*(Email Check|Checking Emails|Check Emails).*$"
+            },
+            {
+                "regex": "^.*([tT]witter).*$"
+            },
+            {
+                "regex": "^.*[iI]nstagram.*$"
+            },
+            {
+                "regex": "^.*[nN]ews.*$"
+            },
+            {
+                "regex": ".*[yY]outube.*"
+            },
+            {
+                "calendarId": "mbn0dk4phhhufr6hpbrl15p4h0@group.calendar.google.com"
+            }
+        ],
+        "children": {
+            "email": {
+                "title": "Emails",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": "^.*(Email Check|Checking Emails).*$"
+                    }
+                ]
+            },
+            "social_media": {
+                "title": "Social Media",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": "^.*([tT]witter|[xX].com).*$"
+                    },
+                    {
+                        "regex": "^.*[iI]nstagram.*$"
+                    }
+                ]
+            },
+            "news": {
+                "title": "News",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": "^.*[nN]ews.*$"
+                    }
+                ]
+            },
+            "youtube": {
+                "title": "Youtube",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": ".*[yY]outube.*"
+                    }
+                ]
+            }
+        }
+    },
+    "learning": {
+        "title": "Learning",
+        "color": "#008000",
+        "patterns": [
+            {
+                "regex": "^.* \\| Learning$"
+            }
+        ],
+        "children": {
+            "books": {
+                "title": "Books",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": "^.* \\| (Books|Book|Reading).*$"
+                    }
+                ]
+            },
+            "courses": {
+                "title": "Courses",
+                "color": "#008000",
+                "patterns": [
+                    {
+                        "regex": "^.*(Courses|Course|Education).*$"
+                    }
+                ]
+            }
+        }
+    },
+    "vehicle": {
+        "title": "Vehicle",
+        "color": "#008000",
+        "patterns": [
+            {
+                "regex": "^.* \\| Vehicle$"
+            }
+        ]
+    }
+}
