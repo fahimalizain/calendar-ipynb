@@ -8,6 +8,19 @@ from IPython.display import DisplayHandle
 
 from calendar_ipynb.utils import get_temp_path
 
+from enum import Enum
+
+
+class DateRangePreset(str, Enum):
+    TODAY = "today"
+    YESTERDAY = "yesterday"
+    THIS_WEEK = "this_week"
+    LAST_7_DAYS = "last_7_days"
+    LAST_14_DAYS = "last_14_days"
+    THIS_MONTH = "this_month"
+    CUSTOM = "custom"
+
+
 DATE_RANGE_SELECTION_CACHE = get_temp_path("date_range_selection.json")
 
 _date_selection_widget = None
@@ -43,35 +56,41 @@ def build_widget():
         today = datetime.now().date()
         from_date_picker.value = today
         to_date_picker.value = today
+        cache_selection(DateRangePreset.TODAY)
 
     def set_yesterday(b):
         yesterday = (datetime.now() - timedelta(days=1)).date()
         from_date_picker.value = yesterday
         to_date_picker.value = yesterday
+        cache_selection(DateRangePreset.YESTERDAY)
 
     def set_this_week(b):
         today = datetime.now().date()
         first_day = today - timedelta(days=today.weekday())
         from_date_picker.value = first_day
         to_date_picker.value = today
+        cache_selection(DateRangePreset.THIS_WEEK)
 
     def set_last_7_days(b):
         today = datetime.now().date()
         last_week = (datetime.now() - timedelta(days=7)).date()
         from_date_picker.value = last_week
         to_date_picker.value = today
+        cache_selection(DateRangePreset.LAST_7_DAYS)
 
     def set_last_14_days(b):
         today = datetime.now().date()
         two_weeks_ago = (datetime.now() - timedelta(days=14)).date()
         from_date_picker.value = two_weeks_ago
         to_date_picker.value = today
+        cache_selection(DateRangePreset.LAST_14_DAYS)
 
     def set_this_month(b):
         today = datetime.now().date()
         first_day = today.replace(day=1)
         from_date_picker.value = first_day
         to_date_picker.value = today
+        cache_selection(DateRangePreset.THIS_MONTH)
 
     # Attach handlers to buttons
     today_btn.on_click(set_today)
@@ -98,18 +117,25 @@ def build_widget():
         [widgets.HBox([from_date_picker, to_date_picker]), buttons]
     )
 
-    from_date_picker.observe(cache_selection)
-    to_date_picker.observe(cache_selection)
+    def observe_date_change(*args, **kwargs):
+        cache_selection(DateRangePreset.CUSTOM)
+
+    from_date_picker.observe(observe_date_change)
+    to_date_picker.observe(observe_date_change)
 
 
-def cache_selection(*args, **kwargs):
-    from_date, to_date = get_selected_date_range()
+def cache_selection(preset: DateRangePreset = None, *args, **kwargs):
     data = {}
-    if from_date:
-        data["from_date"] = from_date.isoformat() + "Z"
 
-    if to_date:
-        data["to_date"] = to_date.isoformat() + "Z"
+    if preset and preset != DateRangePreset.CUSTOM:
+        data["preset"] = preset
+    else:
+        from_date, to_date = get_selected_date_range()
+        if from_date:
+            data["from_date"] = from_date.isoformat() + "Z"
+        if to_date:
+            data["to_date"] = to_date.isoformat() + "Z"
+        data["preset"] = DateRangePreset.CUSTOM
 
     with open(DATE_RANGE_SELECTION_CACHE, "wb") as f:
         content = json.dumps(data, indent=4)
@@ -117,14 +143,36 @@ def cache_selection(*args, **kwargs):
 
 
 def get_selection_from_cache() -> Tuple[datetime, datetime]:
-    # Check if cache file exists
     if not os.path.exists(DATE_RANGE_SELECTION_CACHE):
-        return {}
+        return datetime.now().date(), datetime.now().date()
 
     with open(DATE_RANGE_SELECTION_CACHE, "rb") as f:
         content = f.read()
         _selection = json.loads(content)
 
+        preset = _selection.get("preset")
+
+        if preset:
+            today = datetime.now().date()
+            if preset == DateRangePreset.TODAY:
+                return today, today
+            elif preset == DateRangePreset.YESTERDAY:
+                yesterday = today - timedelta(days=1)
+                return yesterday, yesterday
+            elif preset == DateRangePreset.THIS_WEEK:
+                first_day = today - timedelta(days=today.weekday())
+                return first_day, today
+            elif preset == DateRangePreset.LAST_7_DAYS:
+                last_week = today - timedelta(days=7)
+                return last_week, today
+            elif preset == DateRangePreset.LAST_14_DAYS:
+                two_weeks_ago = today - timedelta(days=14)
+                return two_weeks_ago, today
+            elif preset == DateRangePreset.THIS_MONTH:
+                first_day = today.replace(day=1)
+                return first_day, today
+
+        # Handle custom dates or fallback
         _from_date = (
             datetime.fromisoformat(_selection.get("from_date").replace("Z", "+00:00"))
             if _selection.get("from_date")

@@ -82,7 +82,6 @@ def filter_out_future_events(events: List[dict]):
     - For events that has started and is still running, we will update it's duration to
       the current time
     """
-    print(f"No. of Events before: {len(events)}")
 
     # Outright remove events that have started in the future
     events = [
@@ -90,8 +89,6 @@ def filter_out_future_events(events: List[dict]):
         for x in events
         if datetime.fromisoformat(x["start"]["dateTime"]) < datetime.now(pytz.UTC)
     ]
-
-    print(f"No. of Events after: {len(events)}")
 
     # Update events that have started and are still running
     for event in events:
