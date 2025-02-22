@@ -103,6 +103,9 @@
                 "patterns": [
                     {
                         "regex": "^.*(Woke Up|Asleep).*$"
+                    },
+                    {
+                        "regex": "^Get Ready for.*Bed$"
                     }
                 ]
             },
@@ -120,7 +123,7 @@
                 "color": "#008000",
                 "patterns": [
                     {
-                        "regex": ".*([bB]reakfast|[lL]unch|[dD]inner|Restaurant|Tea|Coffee).*"
+                        "regex": ".*([bB]reakfast|[lL]unch|[dD]inner|Restaurant|Tea|Coffee|Snacks).*"
                     }
                 ]
             },

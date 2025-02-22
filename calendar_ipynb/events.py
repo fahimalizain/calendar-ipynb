@@ -1,5 +1,7 @@
 import logging
+from typing import List
 from datetime import datetime
+import pytz
 
 from googleapiclient.discovery import build
 
@@ -72,6 +74,41 @@ def fetch_events(
     events = [x for x in events if x.get("eventType", None) in ("default", "fromGmail")]
 
     return events
+
+
+def filter_out_future_events(events: List[dict]):
+    """
+    - Filters out events which has start date in the FUTURE
+    - For events that has started and is still running, we will update it's duration to
+      the current time
+    """
+    print(f"No. of Events before: {len(events)}")
+
+    # Outright remove events that have started in the future
+    events = [
+        x
+        for x in events
+        if datetime.fromisoformat(x["start"]["dateTime"]) < datetime.now(pytz.UTC)
+    ]
+
+    print(f"No. of Events after: {len(events)}")
+
+    # Update events that have started and are still running
+    for event in events:
+        end_datetime = datetime.fromisoformat(event["end"]["dateTime"])
+        if end_datetime <= datetime.now(pytz.UTC):
+            continue
+
+        start_datetime = datetime.fromisoformat(event["start"]["dateTime"])
+        event["duration_min"] = (
+            datetime.now(pytz.UTC) - start_datetime
+        ).total_seconds() // 60
+
+    return events
+
+
+def sort_events(events):
+    return sorted(events, key=lambda x: datetime.fromisoformat(x["start"]["dateTime"]))
 
 
 def get_event_duration(event):
