@@ -20,6 +20,7 @@ flake8 = "^7.1.2"
 black = {extras = ["jupyter"], version = "^25.1.0"}
 pandas = "^2.2.3"
 mplcursors = "^0.6"
+pydantic = "^2.10.6"
 
 
 [build-system]

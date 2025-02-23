@@ -1,6 +1,6 @@
 import logging
 from typing import List
-from datetime import datetime
+from datetime import datetime, date, timedelta
 import pytz
 
 from googleapiclient.discovery import build
@@ -104,8 +104,123 @@ def filter_out_future_events(events: List[dict]):
     return events
 
 
+def handle_overlapping_event_durations(events: List[dict]):
+    """
+    Handles overlapping events using a time-slice approach:
+    - Identifies all unique time boundaries
+    - For each time slice, splits duration equally among overlapping events
+    """
+    if not events:
+        return events
+
+    # Get all unique time boundaries
+    boundaries = set()
+    for event in events:
+        start = datetime.fromisoformat(event["start"]["dateTime"])
+        end = datetime.fromisoformat(event["end"]["dateTime"])
+        boundaries.add(start)
+        boundaries.add(end)
+
+    boundaries = sorted(list(boundaries))
+
+    # Reset all event durations to 0
+    for event in events:
+        event["duration_min"] = 0
+
+    # Process each time slice
+    for i in range(len(boundaries) - 1):
+        slice_start = boundaries[i]
+        slice_end = boundaries[i + 1]
+        slice_duration = (slice_end - slice_start).total_seconds() / 60
+
+        # Find events active during this slice
+        active_events = []
+        for event in events:
+            event_start = datetime.fromisoformat(event["start"]["dateTime"])
+            event_end = datetime.fromisoformat(event["end"]["dateTime"])
+            if event_start <= slice_start and event_end >= slice_end:
+                active_events.append(event)
+
+        # Split this slice's duration among active events
+        if active_events:
+            duration_per_event = slice_duration / len(active_events)
+            for event in active_events:
+                event["duration_min"] += duration_per_event
+
+    return events
+
+
 def sort_events(events):
-    return sorted(events, key=lambda x: datetime.fromisoformat(x["start"]["dateTime"]))
+    return sorted(
+        events,
+        key=lambda x: (
+            datetime.fromisoformat(x["start"]["dateTime"]),
+            -x["duration_min"],
+        ),
+    )
+
+
+def insert_untracked_times(events: List[dict]):
+    """
+    Inserts a New Google Calendar Event with duration set to
+    untracked time (excluding sleep time).
+
+    We could improve this function by sprinkling the untracked events
+    in the actual gaps between tracked events.
+    """
+    from .meta import get_daily_sleep_minutes
+
+    sleep_min = get_daily_sleep_minutes()
+    daily_tracked = dict()
+    for event in events:
+        if event["duration_min"] <= 0:
+            continue
+
+        date_key = datetime.fromisoformat(event["start"]["dateTime"]).date().isoformat()
+        if date_key not in daily_tracked:
+            daily_tracked[date_key] = 0
+
+        daily_tracked[date_key] += event["duration_min"]
+
+    # Remove today's tracked time
+    daily_tracked.pop(date.today().isoformat(), None)
+
+    for date_key, tracked_duration in daily_tracked.items():
+        untracked_duration_min = (24 * 60) - tracked_duration - sleep_min
+        if untracked_duration_min <= 0:
+            continue
+
+        date_obj = date.fromisoformat(date_key)
+        start_datetime = datetime(
+            year=date_obj.year,
+            month=date_obj.month,
+            day=date_obj.day,
+            hour=0,
+            minute=0,
+            second=0,
+            tzinfo=pytz.UTC,
+        )
+        end_datetime = start_datetime + timedelta(minutes=untracked_duration_min)
+
+        events.append(
+            {
+                "summary": f"{untracked_duration_min} min | Untracked",
+                "start": {
+                    "dateTime": start_datetime.isoformat(),
+                    "timeZone": "UTC",
+                },
+                "end": {
+                    "dateTime": end_datetime.isoformat(),
+                    "timeZone": "UTC",
+                },
+                "visibility": "default",
+                "status": "confirmed",
+                # Custom
+                "duration_min": untracked_duration_min,
+            }
+        )
+
+    return sort_events(events)
 
 
 def get_event_duration(event):

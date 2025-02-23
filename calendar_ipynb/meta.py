@@ -16,7 +16,7 @@ def classify_events(events):
     preferences = load_preferences()
     unclassified_events = []
     for event in events:
-        event["categories"] = classify_event(event, preferences)
+        event["categories"] = classify_event(event, preferences.get("categories", {}))
         if event["categories"]:
             logger.debug(
                 f"Event {event['summary']} classified as {event['categories']}"
@@ -84,3 +84,13 @@ def classify_event(event, preferences):
         logger.warning(f"Multiple Labels Found on {event['summary']}: {results}")
 
     return results
+
+
+def get_daily_sleep_minutes():
+    """
+    Get the daily sleep hours from the user preferences (default is 8, in minutes)
+    """
+    preferences = load_preferences()
+    hours = preferences.get("daily_sleep_hours", 8)
+    in_minutes = round(hours * 60)
+    return in_minutes
