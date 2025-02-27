@@ -18,6 +18,7 @@ class DateRangePreset(str, Enum):
     LAST_7_DAYS = "last_7_days"
     LAST_14_DAYS = "last_14_days"
     THIS_MONTH = "this_month"
+    LAST_30_DAYS = "last_30_days"
     CUSTOM = "custom"
 
 
@@ -50,6 +51,7 @@ def build_widget():
     last_7_days_btn = widgets.Button(description="Last 7 Days")
     last_14_days_btn = widgets.Button(description="Last 14 Days")
     this_month_btn = widgets.Button(description="This Month")
+    last_30_days_btn = widgets.Button(description="Last 30 Days")
 
     # Create button handlers
     def set_today(b):
@@ -92,6 +94,13 @@ def build_widget():
         to_date_picker.value = today
         cache_selection(DateRangePreset.THIS_MONTH)
 
+    def set_last_30_days(b):
+        today = datetime.now().date()
+        thirty_days_ago = (datetime.now() - timedelta(days=30)).date()
+        from_date_picker.value = thirty_days_ago
+        to_date_picker.value = today
+        cache_selection(DateRangePreset.LAST_30_DAYS)
+
     # Attach handlers to buttons
     today_btn.on_click(set_today)
     yesterday_btn.on_click(set_yesterday)
@@ -99,6 +108,7 @@ def build_widget():
     last_7_days_btn.on_click(set_last_7_days)
     last_14_days_btn.on_click(set_last_14_days)
     this_month_btn.on_click(set_this_month)
+    last_30_days_btn.on_click(set_last_30_days)
 
     # Create horizontal button container
     buttons = widgets.HBox(
@@ -109,6 +119,7 @@ def build_widget():
             last_7_days_btn,
             last_14_days_btn,
             this_month_btn,
+            last_30_days_btn,
         ]
     )
 
@@ -130,11 +141,13 @@ def cache_selection(preset: DateRangePreset = None, *args, **kwargs):
     if preset and preset != DateRangePreset.CUSTOM:
         data["preset"] = preset
     else:
-        from_date, to_date = get_selected_date_range()
+        # from_date, to_date = get_selected_date_range()
+        from_date = _date_selection_widget.children[0].children[0].value
+        to_date = _date_selection_widget.children[0].children[1].value
         if from_date:
-            data["from_date"] = from_date.isoformat() + "Z"
+            data["from_date"] = from_date.isoformat()
         if to_date:
-            data["to_date"] = to_date.isoformat() + "Z"
+            data["to_date"] = to_date.isoformat()
         data["preset"] = DateRangePreset.CUSTOM
 
     with open(DATE_RANGE_SELECTION_CACHE, "wb") as f:
@@ -171,6 +184,9 @@ def get_selection_from_cache() -> Tuple[datetime, datetime]:
             elif preset == DateRangePreset.THIS_MONTH:
                 first_day = today.replace(day=1)
                 return first_day, today
+            elif preset == DateRangePreset.LAST_30_DAYS:
+                thirty_days_ago = today - timedelta(days=30)
+                return thirty_days_ago, today
 
         # Handle custom dates or fallback
         _from_date = (
@@ -197,8 +213,9 @@ def get_selected_date_range() -> Tuple[datetime, datetime]:
         _display_handle = DisplayHandle()
     _display_handle.display(_date_selection_widget)
 
-    from_date = _date_selection_widget.children[0].children[0].value
-    to_date = _date_selection_widget.children[0].children[1].value
+    from_date, to_date = get_selection_from_cache()
+    # from_date = _date_selection_widget.children[0].children[0].value
+    # to_date = _date_selection_widget.children[0].children[1].value
 
     if from_date:
         from_date = datetime.combine(from_date, time(0, 0, 0))
