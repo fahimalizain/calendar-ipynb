@@ -32,19 +32,29 @@ def fetch_events(
     logger.info(f"Fetching events from {from_datetime} to {to_datetime} for {email}")
     service = get_calendar_service(email)
 
-    events_result = (
-        service.events()
-        .list(
-            calendarId=calendar_id,
-            timeMin=from_datetime.isoformat() + "Z",
-            timeMax=to_datetime.isoformat() + "Z",
-            singleEvents=True,
-            orderBy="startTime",
-        )
-        .execute()
-    )
+    events = []
+    page_token = None
 
-    events = events_result.get("items", [])
+    while True:
+        events_result = (
+            service.events()
+            .list(
+                calendarId=calendar_id,
+                timeMin=from_datetime.isoformat() + "Z",
+                timeMax=to_datetime.isoformat() + "Z",
+                singleEvents=True,
+                orderBy="startTime",
+                pageToken=page_token,
+            )
+            .execute()
+        )
+
+        events.extend(events_result.get("items", []))
+
+        page_token = events_result.get("nextPageToken", None)
+        if not page_token:
+            break
+
     logger.debug(
         f"Found {len(events)} events in the date range {from_datetime} to {to_datetime}"
         " for {email} in {calendar_id}"
