@@ -2,6 +2,7 @@ import json
 import os
 from datetime import datetime, time, timedelta
 from typing import Tuple
+from zoneinfo import ZoneInfo
 
 import ipywidgets as widgets
 from IPython.display import DisplayHandle
@@ -203,7 +204,7 @@ def get_selection_from_cache() -> Tuple[datetime, datetime]:
         return _from_date, _to_date
 
 
-def get_selected_date_range() -> Tuple[datetime, datetime]:
+def get_selected_date_range(timezone: ZoneInfo) -> Tuple[datetime, datetime]:
     global _date_selection_widget, _display_handle
 
     if _date_selection_widget is None:
@@ -218,9 +219,9 @@ def get_selected_date_range() -> Tuple[datetime, datetime]:
     # to_date = _date_selection_widget.children[0].children[1].value
 
     if from_date:
-        from_date = datetime.combine(from_date, time(0, 0, 0))
+        from_date = datetime.combine(from_date, time(0, 0, 0)).replace(tzinfo=timezone)
 
     if to_date:
-        to_date = datetime.combine(to_date, time(23, 59, 59))
+        to_date = datetime.combine(to_date, time(23, 59, 59)).replace(tzinfo=timezone)
 
     return from_date, to_date

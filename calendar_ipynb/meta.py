@@ -86,11 +86,16 @@ def classify_event(event, preferences):
     return results
 
 
+def get_sleep_preferences():
+    preferences = load_preferences()
+    return preferences.get("sleep", {})
+
+
 def get_daily_sleep_minutes():
     """
     Get the daily sleep hours from the user preferences (default is 8, in minutes)
     """
     preferences = load_preferences()
-    hours = preferences.get("daily_sleep_hours", 8)
+    hours = preferences.get("sleep", {}).get("daily_sleep_hours", 8)
     in_minutes = round(hours * 60)
     return in_minutes

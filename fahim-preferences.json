@@ -1,6 +1,11 @@
 {
-    "daily_sleep_hours": 6.5,
     "untracked_category": "untracked",
+    "sleep": {
+        "category": "sleep",
+        "daily_sleep_hours": 6.5,
+        "start_marker": "^.*Asleep.*$",
+        "end_marker": "^.*Woke Up.*$"
+    },
     "categories": {
         "kwalee": {
             "title": "Kwalee",
@@ -79,6 +84,18 @@
                 }
             }
         },
+        "sleep": {
+            "title": "Sleep",
+            "color": "#008000",
+            "patterns": [
+                {
+                    "regex": "^.*(Woke Up|Asleep|Sleeping).*$"
+                },
+                {
+                    "regex": "^Get Ready for.*Bed$"
+                }
+            ]
+        },
         "personal": {
             "title": "Personal",
             "color": "#008000",
@@ -97,18 +114,6 @@
                     "patterns": [
                         {
                             "regex": "^.*(Day Planning).*$"
-                        }
-                    ]
-                },
-                "winding-down": {
-                    "title": "Winding Down",
-                    "color": "#008000",
-                    "patterns": [
-                        {
-                            "regex": "^.*(Woke Up|Asleep).*$"
-                        },
-                        {
-                            "regex": "^Get Ready for.*Bed$"
                         }
                     ]
                 },
@@ -137,7 +142,7 @@
             "color": "#008000",
             "patterns": [
                 {
-                    "regex": ".*([bB]reakfast|[lL]unch|[dD]inner|Restaurant|Tea|Coffee|Snacks).*"
+                    "regex": ".*([bB]reakfast|[lL]unch|[dD]inner|Restaurant|Tea|Coffee|Snacks|Suhoor|Suhur).*"
                 }
             ]
         },
