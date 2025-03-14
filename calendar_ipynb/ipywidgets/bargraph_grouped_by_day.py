@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import mplcursors
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -33,7 +34,7 @@ def show_bargraph(events):
     ).fillna(0)
 
     # Create the stacked bar plot
-    ax = pivot_df.plot(kind="bar", stacked=True, figsize=(12, 6), rot=45)
+    ax = pivot_df.plot(kind="bar", stacked=True, figsize=(15, 6), rot=45)
     # Format dates on x-axis
     ax.set_xticklabels([d.strftime("%Y-%m-%d") for d in pivot_df.index])
 
@@ -69,73 +70,3 @@ def show_bargraph(events):
 
     # Show the plot
     plt.show()
-
-
-"""
-    @cursor.connect("add")
-    def on_add(sel):
-        try:
-            # Get the artist (bar) and its label (category)
-            bar = sel.artist
-            category = bar.get_label()
-
-            # Get the date index from x-coordinate
-            date_idx = int(sel.target[0])
-            date = pivot_df.index[date_idx]
-
-            # Get the actual value for this category on this date
-            value = pivot_df.loc[date, category]
-
-            sel.annotation.set_text(
-                f"Date: {date}\nCategory: {category}\nHours: {value:.2f}"
-            )
-        except Exception:
-            # Fallback simple annotation
-            sel.annotation.set_text(f"Value: {sel.target[1]:.2f}")
-"""
-
-
-"""
-    @cursor.connect("add")
-    def on_add(sel):
-        try:
-            # Get the artist (bar) that was hovered
-            bar = sel.artist
-            # Get the index of the hovered bar
-            bar_idx = bar.get_label()
-            # Get the height at the hover point
-            height = sel.target[1]
-            logger.info(f"Hovered over bar {bar_idx} at height {height}", bar)
-
-            # Find the date (x-axis value)
-            date_idx = int(sel.target[0])
-            date = pivot_df.index[date_idx]
-
-            sel.annotation.set_text(
-                f"Date: {date}\nCategory: {bar_idx}\nHours: {height:.2f}"
-            )
-        except Exception:
-            # Fallback simple annotation
-            sel.annotation.set_text(f"Value: {sel.target[1]:.2f}")
-"""
-
-"""
-def _on_add_old(sel):
-    # Get the bar's coordinates
-    x, y = sel.target
-    # Calculate which category and date based on the x coordinate
-    date_idx = int(x)
-    date = pivot_df.index[date_idx]
-
-    # Find which stack segment was clicked
-    y_sums = pivot_df.iloc[date_idx].cumsum()
-    category_idx = y_sums.searchsorted(y, side="right")
-    category = pivot_df.columns[category_idx]
-
-    # Get the actual value for this segment
-    value = pivot_df.iloc[date_idx][category]
-
-    sel.annotation.set_text(
-        f"Date: {date}\nCategory: {category}\nHours: {value:.2f}"
-    )
-"""

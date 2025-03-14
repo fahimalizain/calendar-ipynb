@@ -27,10 +27,10 @@ def show_piechart(events):
     category_totals = df.groupby("category")["duration"].sum()
 
     # Create figure and axis
-    fig, ax = plt.subplots(figsize=(10, 8))
+    pie_fig, pie_ax = plt.subplots(figsize=(10, 8))
 
     # Create pie chart
-    wedges, texts, autotexts = ax.pie(
+    wedges, texts, autotexts = pie_ax.pie(
         category_totals,
         labels=category_totals.index,
         autopct="%1.1f%%",
@@ -49,17 +49,51 @@ def show_piechart(events):
         loc="upper left",
     )
 
-    # Add tooltips
-    cursor = mplcursors.cursor(wedges, hover=True)
+    # Add a text box for displaying clicked wedge info
+    info_text = pie_ax.text(
+        0.5,
+        -0.05,
+        "Click a wedge to see details",
+        transform=pie_ax.transAxes,
+        ha="center",
+        va="center",
+        bbox=dict(facecolor="white", alpha=0.8, edgecolor="gray"),
+    )
 
-    @cursor.connect("add")
+    # Add tooltips
+    pie_cursor = mplcursors.cursor(pie_ax, hover=True)
+
+    @pie_cursor.connect("add")
     def on_add(sel):
-        category = category_totals.index[wedges.index(sel.artist)]
+        print("Hover detected", sel.artist)
+        # Get the index of the selected wedge
+        wedge_idx = wedges.index(sel.artist)
+        category = category_totals.index[wedge_idx]
         hours = category_totals[category]
         percentage = (hours / category_totals.sum()) * 100
         sel.annotation.set_text(
             f"Category: {category}\nHours: {hours:.2f}\nPercentage: {percentage:.1f}%"
         )
+
+    # Function to handle click events
+    def on_click(event):
+        if event.inaxes != pie_ax:  # Ignore clicks outside the axes
+            return
+
+        # Check which wedge was clicked
+        for wedge_idx, wedge in enumerate(wedges):
+            if wedge.contains_point([event.x, event.y]):
+                category = category_totals.index[wedge_idx]
+                hours = category_totals[wedge_idx]
+                percentage = (hours / category_totals.sum()) * 100
+                info_text.set_text(
+                    f"Category: {category}\nHours: {hours:.2f}\nPercentage: {percentage:.1f}%"
+                )
+                pie_fig.canvas.draw_idle()  # Update the canvas
+                return
+
+    # Connect the click event to the figure
+    pie_fig.canvas.mpl_connect("button_press_event", on_click)
 
     plt.tight_layout()
     plt.show()

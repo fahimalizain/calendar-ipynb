@@ -51,7 +51,7 @@
                             "regex": ".*(Prayer:|Masjid).*"
                         },
                         {
-                            "regex": "^.*(Jumu'ah|Jummah|Jumuah|Friday Prayer).*$"
+                            "regex": "^.*(Jumu'ah|Jummah|Jumuah|Friday Prayer|Taraweeh).*$"
                         }
                     ]
                 },
@@ -93,6 +93,9 @@
                 },
                 {
                     "regex": "^Get Ready for.*Bed$"
+                },
+                {
+                    "regex": "^.*(Power Nap|Quick Nap).*$"
                 }
             ]
         },
@@ -117,21 +120,15 @@
                         }
                     ]
                 },
-                "power-nap": {
-                    "title": "Power Nap",
-                    "color": "#008000",
-                    "patterns": [
-                        {
-                            "regex": "^.*(Power Nap|Quick Nap).*$"
-                        }
-                    ]
-                },
                 "finances": {
                     "title": "Finances",
                     "color": "#008000",
                     "patterns": [
                         {
-                            "regex": ".*Finances.*"
+                            "regex": ".*Personal Finances?.*"
+                        },
+                        {
+                            "regex": "^.* \\| Finances?$"
                         }
                     ]
                 }
@@ -142,7 +139,7 @@
             "color": "#008000",
             "patterns": [
                 {
-                    "regex": ".*([bB]reakfast|[lL]unch|[dD]inner|Restaurant|Tea|Coffee|Snacks|Suhoor|Suhur).*"
+                    "regex": ".*([bB]reakfast|[lL]unch|[dD]inner|Restaurant|Tea|Coffee|Snacks|Suhoor|Suhur|Iftar).*"
                 }
             ]
         },
@@ -263,6 +260,21 @@
                 }
             }
         },
+        "social_media_youtube": {
+            "title": "Social Media & Youtube",
+            "color": "#008000",
+            "patterns": [
+                {
+                    "regex": "^.*([tT]witter|[xX].com).*$"
+                },
+                {
+                    "regex": "^.*[iI]nstagram.*$"
+                },
+                {
+                    "regex": ".*[yY]outube.*"
+                }
+            ]
+        },
         "stay_informed": {
             "title": "Stay Informed",
             "color": "#008000",
@@ -271,16 +283,7 @@
                     "regex": "^.*(Email Check|Checking Emails|Check Emails).*$"
                 },
                 {
-                    "regex": "^.*([tT]witter).*$"
-                },
-                {
-                    "regex": "^.*[iI]nstagram.*$"
-                },
-                {
                     "regex": "^.*[nN]ews.*$"
-                },
-                {
-                    "regex": ".*[yY]outube.*"
                 },
                 {
                     "calendarId": "mbn0dk4phhhufr6hpbrl15p4h0@group.calendar.google.com"
@@ -296,33 +299,12 @@
                         }
                     ]
                 },
-                "social_media": {
-                    "title": "Social Media",
-                    "color": "#008000",
-                    "patterns": [
-                        {
-                            "regex": "^.*([tT]witter|[xX].com).*$"
-                        },
-                        {
-                            "regex": "^.*[iI]nstagram.*$"
-                        }
-                    ]
-                },
                 "news": {
                     "title": "News",
                     "color": "#008000",
                     "patterns": [
                         {
                             "regex": "^.*[nN]ews.*$"
-                        }
-                    ]
-                },
-                "youtube": {
-                    "title": "Youtube",
-                    "color": "#008000",
-                    "patterns": [
-                        {
-                            "regex": ".*[yY]outube.*"
                         }
                     ]
                 }
@@ -372,6 +354,15 @@
             "patterns": [
                 {
                     "regex": "^.* \\| Vestido$"
+                }
+            ]
+        },
+        "scalping": {
+            "title": "Scalping",
+            "color": "#008000",
+            "patterns": [
+                {
+                    "regex": "^.* \\| Scalping$"
                 }
             ]
         },
