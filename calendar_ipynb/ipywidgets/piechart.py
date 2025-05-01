@@ -1,3 +1,4 @@
+import datetime
 import logging
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -10,6 +11,9 @@ def show_piechart(events):
     if not events:
         raise ValueError("No events provided")
 
+    from_date = datetime.date.max
+    to_date = datetime.date.min
+
     # Create data list with category and duration
     data = []
     for event in events:
@@ -19,6 +23,10 @@ def show_piechart(events):
         # We only consider the first category for each event
         category = event["categories"][0][0].split("/")[0]
         data.append({"category": category, "duration": event["duration_min"] / 60})
+
+        start_datetime = datetime.datetime.fromisoformat(event["start"]["dateTime"])
+        from_date = min(from_date, start_datetime.date())
+        to_date = max(to_date, start_datetime.date())
 
     # Create DataFrame
     df = pd.DataFrame(data)
@@ -38,7 +46,7 @@ def show_piechart(events):
     )
 
     # Add a title
-    plt.title("Total Time Distribution by Category")
+    plt.title(f"Total Time Distribution by Category: {from_date} to {to_date}")
 
     # Add legend
     plt.legend(

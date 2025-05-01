@@ -64,6 +64,7 @@ def get_user_info(creds: Credentials):
 
 
 def verify_credentials(email: str):
+    logger.info("Verifying credentials for %s", email)
     creds = get_account_credentials(email)
     if not creds:
         raise ValueError(f"No credentials found for {email}")
