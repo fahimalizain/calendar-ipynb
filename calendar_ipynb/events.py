@@ -104,7 +104,7 @@ def fetch_events(
     return events
 
 
-def filter_out_future_events(events: List[dict]):
+def filter_out_future_events(events: List[dict], to_datetime: datetime):
     """
     - Filters out events which has start date in the FUTURE
     - For events that has started and is still running, we will update it's duration to
@@ -113,20 +113,24 @@ def filter_out_future_events(events: List[dict]):
 
     # Outright remove events that have started in the future
     now_datetime = datetime.now(pytz.UTC)
+    boundary_datetime = min(to_datetime, now_datetime)
+
     events = [
         x
         for x in events
-        if datetime.fromisoformat(x["start"]["dateTime"]) < now_datetime
+        if datetime.fromisoformat(x["start"]["dateTime"]) < boundary_datetime
     ]
 
     # Update events that have started and are still running
     for event in events:
         end_datetime = datetime.fromisoformat(event["end"]["dateTime"])
-        if end_datetime <= now_datetime:
+        if end_datetime <= boundary_datetime:
             continue
 
         start_datetime = datetime.fromisoformat(event["start"]["dateTime"])
-        event["duration_min"] = (now_datetime - start_datetime).total_seconds() // 60
+        event["duration_min"] = (
+            boundary_datetime - start_datetime
+        ).total_seconds() // 60
 
     return events
 
@@ -169,6 +173,47 @@ def filter_out_past_events(from_datetime: datetime, events: List[dict]):
         filtered_events.append(event)
 
     return filtered_events
+
+
+def breakdown_overnight_events(events: List[dict]):
+    """
+    Breaks down overnight events into two separate events:
+    - One for the part before midnight
+    - One for the part after midnight
+    """
+    if not events:
+        return events
+
+    new_events = []
+    for event in events:
+        start_datetime = datetime.fromisoformat(event["start"]["dateTime"])
+        midnight = (start_datetime + timedelta(days=1)).replace(
+            hour=0, minute=0, second=0, microsecond=0
+        )
+        end_datetime = datetime.fromisoformat(event["end"]["dateTime"])
+
+        # We check if the event spans overnight also we check if the end time is after midnight  # noqa: E501
+        # to avoid splitting events that end at midnight
+        if start_datetime.date() != end_datetime.date() and end_datetime > midnight:
+            # Split the event into two parts
+            new_events.append(
+                {
+                    **event,
+                    "end": {"dateTime": midnight.isoformat(), "timeZone": "UTC"},
+                    "duration_min": (midnight - start_datetime).total_seconds() // 60,
+                }
+            )
+            new_events.append(
+                {
+                    **event,
+                    "start": {"dateTime": midnight.isoformat(), "timeZone": "UTC"},
+                    "duration_min": (end_datetime - midnight).total_seconds() // 60,
+                }
+            )
+        else:
+            new_events.append(event)
+
+    return new_events
 
 
 def handle_overlapping_event_durations(events: List[dict]):
