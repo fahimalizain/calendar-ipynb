@@ -478,13 +478,16 @@ def process_events_and_classify(
     events: List[dict],
     from_datetime: datetime,
     to_datetime: datetime,
-    event_types: List[str],
+    event_types: List[str] = None,
 ):
     # Process Events
     # Make a deep copy of the fetched events to avoid modifying the original list
     from copy import deepcopy
     from .meta import classify_events
     from .sleep_events import insert_sleep_events
+
+    if not event_types:
+        event_types = ["default", "fromGmail"]
 
     events = deepcopy(events)
 
