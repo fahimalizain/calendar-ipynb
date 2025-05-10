@@ -436,6 +436,44 @@ def pretty_print_timedelta(td: timedelta) -> str:
     return " ".join(parts)
 
 
+def delete_and_duplicate_recurring_event_instance(
+    email: str,
+    calendar_id: str,
+    instance: dict,
+):
+    service = get_calendar_service(email)
+    logger.info(
+        "Deleting and duplicating event instance: %s", instance.get("summary", "")
+    )  # noqa: E501
+    new_event = {
+        "summary": instance.get("summary", ""),
+        "description": instance.get("description", ""),
+        "location": instance.get("location", ""),
+        "start": instance.get("start"),
+        "end": instance.get("end"),
+        "attendees": instance.get("attendees", []),
+        "reminders": instance.get("reminders", {"useDefault": True}),
+        "colorId": instance.get("colorId", None),
+        "visibility": instance.get("visibility", "default"),
+        "status": instance.get("status", "confirmed"),
+        "eventType": instance.get("eventType", "default"),
+    }
+
+    # Create a new event with the same details as the instance
+    created_event = (
+        service.events().insert(calendarId=calendar_id, body=new_event).execute()
+    )
+    logger.info(f"Created new event: {created_event.get('htmlLink')}")
+
+    # Delete the original instance
+    instance["status"] = "cancelled"
+    service.events().update(
+        calendarId=calendar_id, eventId=instance["id"], body=instance
+    ).execute()
+    logger.info(f"Deleted original instance: {instance.get('htmlLink')}")
+    return created_event
+
+
 def process_events_and_classify(
     events: List[dict],
     from_datetime: datetime,
@@ -452,7 +490,7 @@ def process_events_and_classify(
 
     print("Total Events Fetched:", len(events))
     events = filter_out_all_day_events(events)
-    events = filter_out_event_types(events, event_types=["default", "fromGmail"])
+    events = filter_out_event_types(events, event_types=event_types)
     events = add_duration_minutes(events)
     events = breakdown_overnight_events(events)
     events = filter_out_future_events(events, to_datetime=to_datetime)
