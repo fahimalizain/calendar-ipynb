@@ -10,6 +10,7 @@
         "kwalee": {
             "title": "Kwalee",
             "color": "#008000",
+            "is_productive": true,
             "patterns": [
                 {
                     "regex": "^.* \\| (Almada|Kwalee)$"
@@ -137,6 +138,15 @@
                             "regex": "^.* \\| Finances?$"
                         }
                     ]
+                },
+                "grooming": {
+                    "title": "Grooming",
+                    "color": "#008000",
+                    "patterns": [
+                        {
+                            "regex": "^.* \\| Grooming$"
+                        }
+                    ]
                 }
             }
         },
@@ -157,7 +167,7 @@
             "color": "#008000",
             "patterns": [
                 {
-                    "regex": ".*(Bathroom|Wash Up|Fresh Up).*"
+                    "regex": "^(Bathroom|Wash Up|Fresh Up)$"
                 }
             ]
         },
@@ -182,6 +192,7 @@
         "code73": {
             "title": "CODE73",
             "color": "#008000",
+            "is_productive": true,
             "patterns": [
                 {
                     "regex": "^.* \\| CODE73$"
@@ -349,6 +360,7 @@
         },
         "learning": {
             "title": "Learning",
+            "is_productive": true,
             "color": "#008000",
             "patterns": [
                 {
@@ -396,6 +408,7 @@
         },
         "vestido": {
             "title": "Vestido",
+            "is_productive": true,
             "color": "#008000",
             "patterns": [
                 {
@@ -405,6 +418,7 @@
         },
         "watchman-cctv": {
             "title": "Watchman CCTV",
+            "is_productive": true,
             "color": "#008000",
             "patterns": [
                 {
@@ -414,6 +428,7 @@
         },
         "scalping": {
             "title": "Scalping",
+            "is_productive": true,
             "color": "#008000",
             "patterns": [
                 {
@@ -423,6 +438,7 @@
         },
         "icetreat": {
             "title": "Icetreat",
+            "is_productive": true,
             "color": "#008000",
             "patterns": [
                 {
@@ -432,6 +448,7 @@
         },
         "spicy-home": {
             "title": "Spicy Home",
+            "is_productive": true,
             "color": "#008000",
             "patterns": [
                 {
@@ -441,6 +458,7 @@
         },
         "kidooza": {
             "title": "Kidooza",
+            "is_productive": true,
             "color": "#008000",
             "patterns": [
                 {
@@ -450,6 +468,7 @@
         },
         "simple-aid": {
             "title": "Simple Aid",
+            "is_productive": true,
             "color": "#008000",
             "patterns": [
                 {
@@ -459,6 +478,7 @@
         },
         "flow-trace": {
             "title": "Flow Trace",
+            "is_productive": true,
             "color": "#008000",
             "patterns": [
                 {
@@ -477,6 +497,7 @@
             "children": {
                 "calendar-ipynb": {
                     "title": "calendar-ipynb",
+                    "is_productive": true,
                     "color": "#008000",
                     "patterns": [
                         {

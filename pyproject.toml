@@ -21,6 +21,7 @@ black = {extras = ["jupyter"], version = "^25.1.0"}
 pandas = "^2.2.3"
 mplcursors = "^0.6"
 pydantic = "^2.10.6"
+seaborn = "^0.13.2"
 
 
 [build-system]

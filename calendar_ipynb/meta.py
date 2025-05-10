@@ -99,3 +99,16 @@ def get_daily_sleep_minutes():
     hours = preferences.get("sleep", {}).get("daily_sleep_hours", 8)
     in_minutes = round(hours * 60)
     return in_minutes
+
+
+def get_productive_categories():
+    categories = set()
+    for category, config in load_preferences().get("categories", {}).items():
+        if config.get("is_productive", False):
+            categories.add(category)
+
+        for child_category, child_config in config.get("children", {}).items():
+            if child_config.get("is_productive", False):
+                categories.add(f"{category}/{child_category}")
+
+    return list(categories)

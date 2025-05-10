@@ -7,7 +7,7 @@ import mplcursors
 logger = logging.getLogger(__name__)
 
 
-def show_piechart(events):
+def show_productivity_piechart(events):
     if not events:
         raise ValueError("No events provided")
 
@@ -46,7 +46,7 @@ def show_piechart(events):
     )
 
     # Add a title
-    plt.title(f"Total Time Distribution by Category: {from_date} to {to_date}")
+    plt.title(f"Productive Time spent by Category: {from_date} to {to_date}")
 
     # Add legend
     plt.legend(

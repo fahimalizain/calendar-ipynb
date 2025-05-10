@@ -38,6 +38,11 @@ def fetch_events(
     from_datetime: datetime,
     to_datetime: datetime,
 ):
+    """
+    DEPRECATED: Use fetch_events_incremental instead.
+    This is kept in-case we need to fetch events from a specific calendar without
+    syncing the entire calendar.
+    """
     if not from_datetime or not to_datetime:
         raise ValueError("Please provide from_date and to_date")
 
@@ -78,15 +83,67 @@ def fetch_events(
         " for {email} in {calendar_id}"
     )
 
-    # Filter out All Day Events
-    events = [x for x in events if "date" not in x.get("start", {})]
-
     for event in events:
         event["calendar_id"] = calendar_id
         event["email"] = email
-        event["duration_min"] = get_event_duration(event)
 
+    return events
+
+
+def fetch_events_parallel(
+    email_map: Dict[str, List[str]], from_datetime: datetime, to_datetime: datetime
+):
+    from concurrent.futures import ThreadPoolExecutor
+    from functools import partial
+    from .events_incremental import fetch_events as fetch_events_incremental
+
+    def fetch_calendar_events(email, calendar, from_datetime, to_datetime):
+        """Helper function to fetch events for a single calendar"""
+        return fetch_events_incremental(
+            email=email,
+            calendar_id=calendar,
+            from_datetime=from_datetime,
+            to_datetime=to_datetime,
+        )
+
+    # Replace the sequential fetching with parallel fetching
+    fetched_events = []
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        # Create a list of tasks to execute
+        tasks = []
+        for email, calendars in email_map.items():
+            for calendar in calendars:
+                # Create a partial function with the fixed arguments
+                task = partial(
+                    fetch_calendar_events, email, calendar, from_datetime, to_datetime
+                )
+                tasks.append(task)
+
+        # Execute all tasks in parallel and gather results
+        results = list(executor.map(lambda x: x(), tasks))
+
+        # Flatten the results
+        for result in results:
+            fetched_events.extend(result)
+    return fetched_events
+
+
+def filter_out_all_day_events(events: List[dict]):
     """
+    Filters out all-day events from the list of events.
+    All-day events are identified by the presence of "date" in the start dictionary.
+    """
+    filtered_events = [
+        event for event in events if "date" not in event.get("start", {})
+    ]
+    logger.debug(f"Filtered out {len(events) - len(filtered_events)} all-day events")
+    return filtered_events
+
+
+def filter_out_event_types(events: List[dict], event_types: List[str]):
+    """
+    Filters out events based on their event types.
+    Event types to be filtered out are provided in the event_types list.
     - Event Types can be found here:
       https://developers.google.com/calendar/api/v3/reference/events
 
@@ -99,7 +156,22 @@ def fetch_events(
         "outOfOffice" - An out-of-office event.
         "workingLocation" - A working location event.
     """
-    events = [x for x in events if x.get("eventType", None) in ("default", "fromGmail")]
+    filtered_events = [
+        event for event in events if event.get("eventType") in event_types
+    ]
+    logger.debug(
+        f"Filtered out {len(events) - len(filtered_events)}, keeping {event_types}"
+    )
+    return filtered_events
+
+
+def add_duration_minutes(events: List[dict]):
+    """
+    Adds duration in minutes to each event in the list.
+    The duration is calculated as the difference between the end and start times.
+    """
+    for event in events:
+        event["duration_min"] = get_event_duration(event)
 
     return events
 
@@ -362,3 +434,33 @@ def pretty_print_timedelta(td: timedelta) -> str:
         parts.append(f"{seconds}s")
 
     return " ".join(parts)
+
+
+def process_events_and_classify(
+    events: List[dict],
+    from_datetime: datetime,
+    to_datetime: datetime,
+    event_types: List[str],
+):
+    # Process Events
+    # Make a deep copy of the fetched events to avoid modifying the original list
+    from copy import deepcopy
+    from .meta import classify_events
+    from .sleep_events import insert_sleep_events
+
+    events = deepcopy(events)
+
+    print("Total Events Fetched:", len(events))
+    events = filter_out_all_day_events(events)
+    events = filter_out_event_types(events, event_types=["default", "fromGmail"])
+    events = add_duration_minutes(events)
+    events = breakdown_overnight_events(events)
+    events = filter_out_future_events(events, to_datetime=to_datetime)
+    events = filter_out_past_events(from_datetime=from_datetime, events=events)
+    events = sort_events(events)
+    events = insert_sleep_events(events)
+    events = handle_overlapping_event_durations(events)
+    events = insert_untracked_times(events)
+    events = classify_events(events)
+
+    return events
