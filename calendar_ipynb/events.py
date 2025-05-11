@@ -540,11 +540,14 @@ def process_events_and_classify(
     events = filter_out_event_types(events, event_types=event_types)
     events = add_duration_minutes(events)
     events = breakdown_overnight_events(events)
-    events = filter_out_future_events(events, to_datetime=to_datetime)
     events = filter_out_past_events(from_datetime=from_datetime, events=events)
+    events = filter_out_future_events(events, to_datetime=to_datetime)
     events = sort_events(events)
     events = insert_sleep_events(events)
     events = handle_overlapping_event_durations(events)
+    events = filter_out_future_events(
+        events, to_datetime=to_datetime
+    )  # Redo filter future events since duration_min is reset in the previous step
     events = insert_untracked_times(events)
     events = classify_events(events)
 

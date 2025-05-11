@@ -29,8 +29,10 @@ def show_productivity_piechart(events):
                 for category in x.get("categories", [])
             ]
         )
-        and x.get("categories")[0][0] != "time-left"
+        and x.get("categories")[0][0] not in ("time-left", "sleep")
     ]
+
+    sleep_events = [x for x in events if x.get("categories")[0][0] == "sleep"]
 
     time_left_event = next(
         (x for x in events if x.get("categories")[0][0] == "time-left"),
@@ -41,6 +43,7 @@ def show_productivity_piechart(events):
         raise ValueError("No productive or other events provided")
 
     # Calculate durations in hours
+    sleep_hours = sum(event["duration_min"] for event in sleep_events) / 60
     productive_hours = sum(event["duration_min"] for event in productive_events) / 60
     other_hours = sum(event["duration_min"] for event in other_events) / 60
     time_left_hours = time_left_event["duration_min"] / 60 if time_left_event else 0
@@ -50,6 +53,7 @@ def show_productivity_piechart(events):
         {"category": "Productive", "duration": productive_hours},
         {"category": "Other", "duration": other_hours},
         {"category": "Time Left", "duration": time_left_hours},
+        {"category": "Sleep", "duration": sleep_hours},
     ]
 
     # Create DataFrame
@@ -68,6 +72,7 @@ def show_productivity_piechart(events):
         colors=[
             "#2ecc71",
             "#e74c3c",
+            "#0356fc",
             "#95a5a6",
         ],  # Green for productive, Red for other, Gray for time left
     )
