@@ -344,6 +344,50 @@ def sort_events(events):
     )
 
 
+def insert_time_left_for_today(events: List[dict], timezone: ZoneInfo):
+    """
+    Inserts a New Google Calendar Event with duration set to
+    time left for today (till 12AM).
+
+    Please note that this function is only used for `Today` analysis.
+    """
+
+    # Validate the event list has only Today's events
+    if not events:
+        return events
+
+    dates = set()
+    for event in events:
+        start_datetime = datetime.fromisoformat(event["start"]["dateTime"])
+        dates.add(start_datetime.date())
+
+    if len(dates) > 1:
+        raise ValueError("Events list contains events from multiple dates.")
+    if len(dates) == 0:
+        raise ValueError("Events list is empty.")
+
+    start_datetime = datetime.now(timezone)
+    end_datetime = datetime.combine(date.today(), datetime.max.time(), tzinfo=timezone)
+    new_event = {
+        "summary": "Time left for today",
+        "start": {
+            "dateTime": start_datetime.isoformat(),
+            "timeZone": "UTC",
+        },
+        "end": {
+            "dateTime": end_datetime.isoformat(),
+            "timeZone": "UTC",
+        },
+        "visibility": "default",
+        "status": "confirmed",
+        # Custom
+        "duration_min": (end_datetime.timestamp() - start_datetime.timestamp()) // 60,
+        "categories": [["time-left", "Time Left for Today"]],
+    }
+
+    return [*events, new_event]
+
+
 def insert_untracked_times(events: List[dict]):
     """
     Inserts a New Google Calendar Event with duration set to
