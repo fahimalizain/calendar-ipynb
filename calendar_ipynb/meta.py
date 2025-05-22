@@ -107,6 +107,12 @@ def get_productive_categories():
         if config.get("is_productive", False):
             categories.add(category)
 
+            # Add children categories as well
+            for child_category in config.get("children", {}).keys():
+                categories.add(f"{category}/{child_category}")
+            continue
+
+        # Parent is not productive, check children
         for child_category, child_config in config.get("children", {}).items():
             if child_config.get("is_productive", False):
                 categories.add(f"{category}/{child_category}")

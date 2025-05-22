@@ -148,6 +148,24 @@
                             "regex": "^.* \\| Grooming$"
                         }
                     ]
+                },
+                "career": {
+                    "title": "Career",
+                    "color": "#008000",
+                    "patterns": [
+                        {
+                            "regex": "^.* \\| Career$"
+                        }
+                    ]
+                },
+                "random": {
+                    "title": "Random",
+                    "color": "#008000",
+                    "patterns": [
+                        {
+                            "regex": "^.* \\| Random$"
+                        }
+                    ]
                 }
             }
         },
@@ -355,6 +373,15 @@
                     "patterns": [
                         {
                             "regex": "^.*[nN]ews.*$"
+                        }
+                    ]
+                },
+                "blogs": {
+                    "title": "Blogs",
+                    "color": "#008000",
+                    "patterns": [
+                        {
+                            "regex": "^.* \\| [bB]logs$"
                         }
                     ]
                 }
