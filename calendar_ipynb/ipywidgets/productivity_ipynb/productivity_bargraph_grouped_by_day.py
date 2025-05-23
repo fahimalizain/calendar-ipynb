@@ -32,6 +32,10 @@ def show_productivity_bargraph_grouped_by_day(events):
     pivot_df = df.pivot_table(
         index="date", columns="category", values="duration", aggfunc="sum"
     ).fillna(0)
+    all_dates = pd.date_range(
+        start=pivot_df.index.min(), end=pivot_df.index.max(), freq="D"
+    )
+    pivot_df = pivot_df.reindex(all_dates, fill_value=0)
 
     # Create the stacked bar plot
     ax = pivot_df.plot(kind="bar", stacked=True, figsize=(15, 6), rot=45)

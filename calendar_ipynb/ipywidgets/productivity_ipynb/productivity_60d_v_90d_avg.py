@@ -27,6 +27,12 @@ def show_productivity_line_60d_v_30d_avg(events: list):
     daily_totals.set_index("date", inplace=True)
     daily_totals.sort_index(inplace=True)
 
+    # Ensure all dates within the range are present, filling missing dates with 0 work
+    all_dates = pd.date_range(
+        start=daily_totals.index.min(), end=daily_totals.index.max(), freq="D"
+    )
+    daily_totals = daily_totals.reindex(all_dates, fill_value=0)
+
     # Get the last 30 days date range
     last_date = daily_totals.index.max()
     start_date = last_date - pd.Timedelta(days=30)
