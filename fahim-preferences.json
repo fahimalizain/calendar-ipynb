@@ -7,34 +7,15 @@
         "end_marker": "^.*Woke Up.*$"
     },
     "categories": {
-        "kwalee": {
-            "title": "Kwalee",
-            "color": "#008000",
-            "is_productive": true,
-            "patterns": [
-                {
-                    "regex": "^.* \\| (Almada|Kwalee)$"
-                },
-                {
-                    "calendarId": "fahim.zain@kwalee.com"
-                }
-            ],
-            "children": {
-                "discussions": {
-                    "title": "Discussions",
-                    "color": "#008000",
-                    "patterns": [
-                        {
-                            "regex": "^.*/.* \\| Almada$"
-                        }
-                    ]
-                }
-            }
-        },
         "spiritual": {
             "title": "Spiritual",
             "is_productive": true,
             "color": "#008000",
+            "patterns": [
+                {
+                    "regex": "^.* \\| Spiritual$"
+                }
+            ],
             "children": {
                 "quran": {
                     "title": "Quran",
@@ -90,6 +71,191 @@
                     "patterns": [
                         {
                             "regex": "^.*(Hosh Bardham|Muzakara|Halqa).*$"
+                        }
+                    ]
+                }
+            }
+        },
+        "family": {
+            "title": "Family",
+            "color": "#008000",
+            "patterns": [
+                {
+                    "regex": "^.* \\| Family.*"
+                }
+            ],
+            "children": {
+                "home": {
+                    "title": "Home",
+                    "color": "#008000",
+                    "patterns": [
+                        {
+                            "regex": "^.* \\| Home$"
+                        }
+                    ]
+                },
+                "faaz": {
+                    "title": "Faaz",
+                    "color": "#008000",
+                    "patterns": [
+                        {
+                            "regex": "^.* \\| FAAZ$"
+                        },
+                        {
+                            "regex": "^FAAZ$"
+                        }
+                    ]
+                },
+                "relatives": {
+                    "title": "Relatives",
+                    "color": "#008000",
+                    "patterns": [
+                        {
+                            "regex": "^.* \\| (.*)-Relatives$"
+                        }
+                    ]
+                },
+                "kitchen": {
+                    "title": "Kitchen",
+                    "color": "#008000",
+                    "patterns": [
+                        {
+                            "regex": "^.* \\| Kitchen$"
+                        }
+                    ]
+                },
+                "fsk": {
+                    "title": "FSK",
+                    "color": "#008000",
+                    "patterns": [
+                        {
+                            "regex": "^.* \\| FSK$"
+                        },
+                        {
+                            "regex": "^FSK$"
+                        },
+                        {
+                            "regex": "^.* \\| FSK & Aali$"
+                        },
+                        {
+                            "regex": "^FSK & Aali$"
+                        }
+                    ]
+                },
+                "aalin": {
+                    "title": "Aalin",
+                    "color": "#008000",
+                    "patterns": [
+                        {
+                            "regex": "^.* \\| Aali$"
+                        },
+                        {
+                            "regex": "^.* \\| Aalin$"
+                        },
+                        {
+                            "regex": "^Aalin$"
+                        },
+                        {
+                            "regex": "^Aali$"
+                        }
+                    ]
+                },
+                "parents": {
+                    "title": "Parents",
+                    "color": "#008000",
+                    "patterns": [
+                        {
+                            "regex": "^.* \\| (Parents|Uppa|Umma)$"
+                        },
+                        {
+                            "regex": "^(Uppa|Umma|Parents)$"
+                        }
+                    ]
+                }
+            }
+        },        
+        "kwalee": {
+            "title": "Kwalee",
+            "color": "#008000",
+            "is_productive": true,
+            "patterns": [
+                {
+                    "regex": "^.* \\| Kwalee$"
+                },
+                {
+                    "calendarId": "fahim.zain@kwalee.com"
+                }
+            ],
+            "children": {
+                "almada": {
+                    "title": "Almada",
+                    "color": "#008000",
+                    "patterns": [
+                        {
+                            "regex": "^.* \\| Almada$"
+                        }
+                    ]
+                },
+                "localization": {
+                    "title": "Localization",
+                    "color": "#008000",
+                    "patterns": [
+                        {
+                            "regex": "^.* \\| KwaleeLocalization$"
+                        }
+                    ]
+                },
+                "queens": {
+                    "title": "Queens",
+                    "color": "#008000",
+                    "patterns": [
+                        {
+                            "regex": "^.* \\| QMLG$"
+                        }
+                    ]
+                },
+                "creative-management": {
+                    "title": "Creative Management",
+                    "color": "#008000",
+                    "patterns": [
+                        {
+                            "regex": "^.* \\| KwaleeCMP$"
+                        }
+                    ]
+                },
+                "heroic": {
+                    "title": "Heroic",
+                    "color": "#008000",
+                    "patterns": [
+                        {
+                            "regex": "^.* \\| Heroic$"
+                        }
+                    ]
+                },
+                "hitseeker": {
+                    "title": "HitSeeker",
+                    "color": "#008000",
+                    "patterns": [
+                        {
+                            "regex": "^.* \\| HitSeeker$"
+                        }
+                    ]
+                },
+                "ad-network-interface": {
+                    "title": "Ad Network Interface",
+                    "color": "#008000",
+                    "patterns": [
+                        {
+                            "regex": "^.* \\| KwaleeANI$"
+                        }
+                    ]
+                },
+                "cross-promo": {
+                    "title": "Cross Promo",
+                    "color": "#008000",
+                    "patterns": [
+                        {
+                            "regex": "^.* \\| KwaleeCrossPromo$"
                         }
                     ]
                 }
@@ -199,15 +365,6 @@
                 }
             ]
         },
-        "family": {
-            "title": "Family",
-            "color": "#008000",
-            "patterns": [
-                {
-                    "regex": "^.* \\| Family.*"
-                }
-            ]
-        },
         "code73": {
             "title": "CODE73",
             "color": "#008000",
@@ -248,6 +405,15 @@
                     ]
                 }
             }
+        },
+        "travel": {
+            "title": "Travel",
+            "color": "#008000",
+            "patterns": [
+                {
+                    "regex": "^.* \\| Travel$"
+                }
+            ]
         },
         "social": {
             "title": "Social",
@@ -314,6 +480,12 @@
                 },
                 {
                     "regex": "^(Running|Morning Run)$"
+                },
+                {
+                    "regex": "^Swimming$"
+                },
+                {
+                    "regex": "^.* \\| Swimming$"
                 }
             ]
         },
@@ -329,6 +501,9 @@
                 },
                 {
                     "regex": ".*[yY]ou[tT]ube.*"
+                },
+                {
+                    "regex": "^Reddit$"
                 },
                 {
                     "regex": ".* \\| Social Media$"
@@ -455,6 +630,16 @@
                 }
             ]
         },
+        "trip": {
+            "title": "Trip",
+            "is_productive": true,
+            "color": "#008000",
+            "patterns": [
+                {
+                    "regex": "^.* \\| Trip$"
+                }
+            ]
+        },
         "scalping": {
             "title": "Scalping",
             "is_productive": true,
@@ -492,6 +677,36 @@
             "patterns": [
                 {
                     "regex": "^.*[kK]idooza.*$"
+                }
+            ]
+        },
+        "brook": {
+            "title": "Brook",
+            "is_productive": true,
+            "color": "#008000",
+            "patterns": [
+                {
+                    "regex": "^.* \\| Brook$"
+                }
+            ]
+        },
+        "point-of-sale": {
+            "title": "Point of Sale",
+            "is_productive": true,
+            "color": "#008000",
+            "patterns": [
+                {
+                    "regex": "^.* \\| POS$"
+                }
+            ]
+        },
+        "where-is-my-time": {
+            "title": "Where Is My Time",
+            "is_productive": true,
+            "color": "#008000",
+            "patterns": [
+                {
+                    "regex": "^.* \\| (Where Is My Time|WhereIsMyTime)$"
                 }
             ]
         },
@@ -535,6 +750,40 @@
                     ]
                 }
             }
+        },
+        "thinking": {
+            "title": "Thinking",
+            "color": "#008000",
+            "patterns": [
+                {
+                    "regex": "^(Thinking|Thoughts)$"
+                },
+                {
+                    "regex": "^.* \\| (Thinking|Thoughts)$"
+                }
+            ]
+        },
+        "random": {
+            "title": "Random",
+            "color": "#008000",
+            "patterns": [
+                {
+                    "regex": "^.* \\| Random$"
+                },
+                {
+                    "regex": "^Random$"
+                }
+            ]
+        },
+        "legal": {
+            "title": "Legal",
+            "is_productive": true,
+            "color": "#008000",
+            "patterns": [
+                {
+                    "regex": "^.* \\| Legal$"
+                }
+            ]
         },
         "untracked": {
             "title": "Untracked",
